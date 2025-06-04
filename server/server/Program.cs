@@ -23,12 +23,20 @@ builder.Services.AddCors(options =>
 	options.AddPolicy("AllowReactApp",
 		policy =>
 		{
-			policy.WithOrigins("http://localhost:5173") // React app URL
+			policy.WithOrigins(
+				"http://localhost:5173",
+				"https://sia-product-catalogue-system.vercel.app"
+		) // React app URL
 				  .AllowAnyMethod()
-				  .AllowAnyOrigin()
 				  .AllowAnyHeader();
 		});
 });
+
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(port))
+{
+	builder.WebHost.UseUrls($"http://*:{port}");
+}
 
 var app = builder.Build();
 
